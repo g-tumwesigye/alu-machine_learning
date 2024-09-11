@@ -8,6 +8,12 @@ def cat_matrices(mat1, mat2, axis=0):
     Concatenates two matrices along a specific axis.
     Returns None if the matrices cannot be concatenated.
     """
+    # Convert inputs to lists of lists if they are not already
+    if not isinstance(mat1[0], list):
+        mat1 = [mat1]
+    if not isinstance(mat2[0], list):
+        mat2 = [mat2]
+    
     if axis == 0:
         # Check if the number of columns is the same
         if len(mat1[0]) != len(mat2[0]):
@@ -23,7 +29,7 @@ def cat_matrices(mat1, mat2, axis=0):
         return [row1 + row2 for row1, row2 in zip(mat1, mat2)]
     
     elif axis == 2:
-        # Handling 3D matrices: concatenate along the third axis
+        # Handle 3D matrices: concatenate along the third axis
         if len(mat1) != len(mat2):
             return None
         if any(len(mat1[i]) != len(mat2[i]) for i in range(len(mat1))):
