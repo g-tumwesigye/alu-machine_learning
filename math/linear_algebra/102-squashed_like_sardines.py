@@ -1,36 +1,42 @@
 #!/usr/bin/env python3
-"""
-Squashed Like Sardines
-"""
+'''
+    A function def cat_matrices(mat1, mat2, axis=0)
+    that concatenates two matrices along a specific axis
+'''
+
+
+def matrix_shape(matrix):
+    """
+        Get the matrix shape
+    """
+    matrix_shape = []
+    while (type(matrix) is list):
+        matrix_shape.append(len(matrix))
+        matrix = matrix[0]
+    return matrix_shape
+
 
 def cat_matrices(mat1, mat2, axis=0):
     """
-    Concatenates two matrices along a specific axis.
-    Returns None if the matrices cannot be concatenated.
+        concatenate a matrix
     """
-    if axis == 0:
-        # Check if the number of columns is the same
-        if len(mat1[0]) != len(mat2[0]):
-            return None
-        # Concatenate rows
-        return mat1 + mat2
-    
-    elif axis == 1:
-        # Check if the number of rows is the same
-        if len(mat1) != len(mat2):
-            return None
-        # Concatenate columns
-        return [row1 + row2 for row1, row2 in zip(mat1, mat2)]
-    
-    elif axis == 2:
-        # Handling 3D matrices: concatenate along the third axis
-        if len(mat1) != len(mat2):
-            return None
-        if any(len(mat1[i]) != len(mat2[i]) for i in range(len(mat1))):
-            return None
-        return [[m1 + m2 for m1, m2 in zip(mat1_layer, mat2_layer)]
-                for mat1_layer, mat2_layer in zip(mat1, mat2)]
-    
-    else:
-        # Unsupported axis
+    from copy import deepcopy
+    shape1 = matrix_shape(mat1)
+    shape2 = matrix_shape(mat2)
+    if len(shape1) != len(shape2):
         return None
+    for i in range(len(shape1)):
+        if i != axis:
+            if shape1[i] != shape2[i]:
+                return None
+    return rec(deepcopy(mat1), deepcopy(mat2), axis, 0)
+
+
+def rec(m1, m2, axis=0, current=0):
+    """
+        Do some reclusive calling
+    """
+    if axis != current:
+        return [rec(m1[i], m2[i], axis, current + 1) for i in range(len(m1))]
+    m1.extend(m2)
+    return m1
